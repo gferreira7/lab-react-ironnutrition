@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import foodsArray from './foods.json';
 import { useState } from 'react';
@@ -9,22 +8,67 @@ import { Row, Divider, Button } from 'antd';
 
 function App() {
   const [foodsList, setfoodsList] = useState(foodsArray);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredFoods, setFilteredFoods] = useState(foodsArray);
+  const [showForm, setShowForm] = useState(true);
 
-  const addNewFood = (newFood) => {};
+  const filterFruits = (searchQuery) => {
+    if (searchQuery === '') {
+      setFilteredFoods(foodsList);
+    } else {
+      const filteredSearch = [...foodsList].filter((food) =>
+        food.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredFoods(filteredSearch);
+    }
+  };
 
+  const addNewFood = (newFood) => {
+    console.log(foodsList);
+    setfoodsList([...foodsList, newFood]);
+  };
+
+  const deleteFood = (name) => {
+    const updatedFoods = foodsList.filter((food) => {
+      return food.name !== name;
+    });
+    setfoodsList(updatedFoods);
+    const filteredFoods = updatedFoods.filter((food) =>
+      food.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setFilteredFoods(filteredFoods);
+  };
+
+  const toggleForm = (e) => {
+    setShowForm(!showForm);
+  };
   return (
     <div className="App">
-      <AddFoodForm />
+      <AddFoodForm addNewFood={addNewFood} showForm={showForm} />
 
-      <Button> Hide Form / Add New Food </Button>
+      <Button onClick={toggleForm}>
+        {' '}
+        {showForm ? 'Hide Form' : 'Add New Food'}
+      </Button>
 
-      <Search />
+      <Search
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        filterFruits={filterFruits}
+      />
       <Divider>Food List</Divider>
 
       <Row style={{ width: '100%', justifyContent: 'center' }}>
-        {foodsList.map((foodItem) => {
-          return <FoodBox food={foodItem} />;
-        })}{' '}
+        {filteredFoods.length === 0 ? (
+          <div className='empty-results'>
+            <p>Oops! No more foods to show</p>
+            <img alt="no-results" src="/empty-set.png" />
+          </div>
+        ) : (
+          filteredFoods.map((foodItem) => {
+            return <FoodBox food={foodItem} deleteFood={deleteFood} />;
+          })
+        )}
       </Row>
     </div>
   );

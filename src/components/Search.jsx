@@ -1,14 +1,18 @@
 import { Divider, Input } from 'antd';
 
 // Iteration 5
-function Search(props) {
-  return (
-    <>
-      <Divider>Search</Divider>
+function Search({ searchInput, setSearchInput, filterFruits }) {
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearchInput(value);
+    filterFruits(value);
+  };
 
-      <label>Search</label>
-      <Input value={undefined} type="text" onChange={() => {}} />
-    </>
+  return (
+    <div className='search-wrapper'>
+      <Divider>Search</Divider>
+      <Input value={searchInput} type="text" onChange={handleSearch} />
+    </div>
   );
 }
 

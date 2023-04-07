@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Input, Button, Divider } from 'antd';
-const AddFoodForm = () => {
+
+const AddFoodForm = ({ addNewFood, showForm }) => {
   const [newFood, setNewFood] = useState({
     name: '',
     image: '',
@@ -14,40 +15,56 @@ const AddFoodForm = () => {
   };
 
   return (
-    <form>
-      <Divider>Add Food Entry</Divider>
-      <label>Name</label>
-      <Input
-        onChange={handleInput}
-        type="text"
-        name="name"
-        value={newFood.name}
-      />
-      <label>Image Url</label>
-      <Input
-        onChange={handleInput}
-        type="text"
-        name="image"
-        value={newFood.image}
-      />
-      <label>Calories</label>
+    <div className="add-form">
+      {showForm && (
+        <form>
+          <Divider>Add Food Entry</Divider>
 
-      <Input
-        onChange={handleInput}
-        type="text"
-        name="calories"
-        value={newFood.calories}
-      />
-      <label>Servings</label>
-      <Input
-        onChange={handleInput}
-        type="text"
-        name="servings"
-        placeholder="Number of servings"
-        value={newFood.servings}
-      />
-      <Button type="secondary">Create</Button>
-    </form>
+          <div className="form-input">
+            <label>Name</label>
+            <Input
+              onChange={handleInput}
+              type="text"
+              name="name"
+              value={newFood.name}
+            />
+          </div>
+          <div className="form-input">
+            <label>Image Url</label>
+            <Input
+              onChange={handleInput}
+              type="text"
+              name="image"
+              value={newFood.image}
+            />
+          </div>
+
+          <div className="form-input">
+            <label>Calories</label>
+            <Input
+              onChange={handleInput}
+              type="text"
+              name="calories"
+              value={newFood.calories}
+            />
+          </div>
+          <div className="form-input">
+            <label>Servings</label>
+            <Input
+              onChange={handleInput}
+              type="text"
+              name="servings"
+              placeholder="Number of servings"
+              value={newFood.servings}
+            />
+          </div>
+
+          <Button onClick={() => addNewFood(newFood)} type="primary">
+            Create
+          </Button>
+        </form>
+      )}
+    </div>
   );
 };
 
